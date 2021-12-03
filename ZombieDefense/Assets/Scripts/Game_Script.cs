@@ -7,10 +7,12 @@ public class Game_Script : MonoBehaviour
 {
     public GameObject mainCam;
     public GameObject player;
-    
-    private float beginWave = 5f;
+    public GameObject zombiePrefab;
 
-    private bool waveStart = false;
+    private float beginWave = 5f;
+    private float waveLevel = 1;
+
+    private bool gameStart = false;
 
     // Start is called before the first frame update
     void Start()
@@ -22,15 +24,40 @@ public class Game_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!waveStart) {
+        if (!gameStart) {
             beginWave -= Time.deltaTime;
             if (beginWave < 0) {
-                waveStart = true;
+                print("Game Begin");
+                createWave(waveLevel);
+                gameStart = true;
             }
         }
-        if (waveStart == true) {
-            mainCam.transform.SetParent(player.transform);
-        }
+    }
 
+    public void createWave(float waveLevel) {
+        for (int i = 0; i <= (5 * waveLevel); i++) {
+            var spawnPoint = Random.Range(1, 5);
+            switch(spawnPoint) {
+                case 1:
+                    Instantiate(zombiePrefab, new Vector3(Random.Range(-5, 5), 1.5f, Random.Range(25, 35)), Quaternion.identity);
+                    break;
+
+                case 2:
+                    Instantiate(zombiePrefab, new Vector3(Random.Range(25, 35), 1.5f, Random.Range(-5, 5)), Quaternion.identity);
+                    break;
+
+                case 3:
+                    Instantiate(zombiePrefab, new Vector3(Random.Range(-5, 5), 1.5f, Random.Range(-25, -35)), Quaternion.identity);
+                    break;
+
+                case 4:
+                    Instantiate(zombiePrefab, new Vector3(Random.Range(-25, -35), 1.5f, Random.Range(-5, 5)), Quaternion.identity);
+                    break;
+
+                default:
+                    print("Broke for some reason");
+                    break;
+            }
+        }
     }
 }
