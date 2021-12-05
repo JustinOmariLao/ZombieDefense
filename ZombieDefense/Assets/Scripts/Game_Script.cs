@@ -17,7 +17,7 @@ public class Game_Script : MonoBehaviour
 
     private float beginWave = 4f; // Seconds before the next wave begins
     private float waveLevel = 1; // Level for Wave
-    private int killCounter = 0; // Counter for Kills, used to track when wave level should increase
+    public static int killCounter = 0; // Counter for Kills, used to track when wave level should increase
     private int baseKills = 0; // Logic needed to start the secondary wave
 
     private bool gameStart = false; // Bool to initiate the first wave
@@ -35,6 +35,16 @@ public class Game_Script : MonoBehaviour
         if (Input.GetKeyDown("escape")) {
             pauseUI.SetActive(!pauseUI.activeSelf);
             gameUI.SetActive(!gameUI.activeSelf);
+            if (pauseUI.activeSelf) {
+                Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else {
+                Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         // INITIATE THE FIRST WAVE
@@ -109,6 +119,9 @@ public class Game_Script : MonoBehaviour
     public void resumeGame() {
         pauseUI.SetActive(!pauseUI.activeSelf);
         gameUI.SetActive(!gameUI.activeSelf);
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void quitGame() {
